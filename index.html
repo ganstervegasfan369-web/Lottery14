@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Professional Lottery Slot Machine</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Oswald:wght@600&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:#000;
+  font-family:Montserrat;
+  color:#fff;
+}
+
+/* APP */
+.app{
+  max-width:1200px;
+  margin:auto;
+  border:10px solid #facc15;
+  background:#000;
+}
+
+/* TOP TITLE */
+@keyframes rainbow{
+  0%{background-position:0%}
+  100%{background-position:300%}
+}
+.top{
+  font-size:52px;
+  text-align:center;
+  padding:16px;
+  background:linear-gradient(270deg,red,orange,yellow,green,cyan,blue,violet,red);
+  background-size:300%;
+  animation:rainbow 25s linear infinite;
+  text-shadow:3px 3px 0 #000;
+}
+
+/* SUB TITLE */
+@keyframes royal{
+  0%{background:#00008B}
+  50%{background:#094507}
+  100%{background:#00008B}
+}
+.sub{
+  font-size:34px;
+  text-align:center;
+  padding:14px;
+  animation:royal 8s ease-in-out infinite;
+  border-top:4px solid #000;
+  border-bottom:4px solid #000;
+}
+
+/* STAGE */
+.stage{
+  position:relative;
+  background:linear-gradient(#d1d5db,#f8fafc);
+  padding:40px 90px;
+}
+
+/* RIBBONS */
+.ribbon{
+  position:absolute;
+  top:0;
+  bottom:0;
+  width:90px;
+  background:#b91c1c;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.ribbon span{
+  writing-mode:vertical-rl;
+  font-size:34px;
+  font-weight:800;
+  animation:scrollRibbon 6s linear infinite;
+}
+@keyframes scrollRibbon{
+  0%{transform:translateY(100%) rotate(180deg)}
+  100%{transform:translateY(-100%) rotate(180deg)}
+}
+.left{left:0}
+.right{right:0}
+
+/* SLOT FRAME */
+.frame{
+  display:flex;
+  gap:18px;
+  padding:30px;
+  background:linear-gradient(#9ca3af,#e5e7eb);
+  border:8px solid #374151;
+  box-shadow:inset 0 0 40px rgba(0,0,0,.6);
+}
+
+/* SLOT */
+.slot{
+  width:110px;
+  height:200px;
+  background:#111;
+  border:6px solid #000;
+  overflow:hidden;
+  position:relative; /* 🔴 IMPORTANT FIX */
+}
+
+/* REEL */
+.reel{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  transition:transform .15s linear;
+}
+.reel div{
+  height:200px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:Oswald;
+  font-size:108px;
+  background:#fff;
+  color:#000;
+  border-bottom:2px solid #ccc;
+}
+
+/* TICKER */
+.ticker{
+  background:#facc15;
+  color:#000;
+  font-size:28px;
+  font-weight:800;
+  overflow:hidden;
+  padding:14px;
+}
+.ticker span{
+  display:inline-block;
+  white-space:nowrap;
+  animation:slide 16s linear infinite;
+}
+@keyframes slide{
+  from{transform:translateX(100%)}
+  to{transform:translateX(-100%)}
+}
+
+/* ADMIN */
+.admin{
+  background:#020617;
+  padding:18px;
+  border-top:6px solid #facc15;
+}
+.admin input,.admin button{
+  padding:10px;
+  font-size:17px;
+  margin:6px;
+}
+button{cursor:pointer}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+<div class="top" id="topText">AMERICAN ONLINE LOTTERY</div>
+<div class="sub" id="subText">LION KING – DAILY DRAW</div>
+
+<div class="stage">
+  <div class="ribbon left"><span id="leftRibbon">LION KING</span></div>
+  <div class="ribbon right"><span id="rightRibbon">OFFICIAL</span></div>
+
+  <div class="frame" id="frame"></div>
+</div>
+
+<div class="ticker">
+  <span id="tickerText">DATE: 26/12/2025   TIME: 16:31   LIVE DRAW</span>
+</div>
+
+<div class="admin">
+<h3 style="color:#facc15">ADVANCED ADMIN CONTROLS</h3>
+
+<input oninput="topText.textContent=this.value" placeholder="TOP TITLE">
+<input oninput="subText.textContent=this.value" placeholder="SUB TITLE"><br>
+
+<input oninput="leftRibbon.textContent=this.value" placeholder="LEFT RIBBON">
+<input oninput="rightRibbon.textContent=this.value" placeholder="RIGHT RIBBON"><br>
+
+<input id="dateInput" placeholder="DATE">
+<input id="timeInput" placeholder="TIME">
+<input id="venueInput" placeholder="VENUE">
+<button onclick="updateTicker()">UPDATE TICKER</button>
+</div>
+
+</div>
+
+<script>
+const frame=document.getElementById('frame');
+const reels=[];
+const slotCount=5;
+
+for(let i=0;i<slotCount;i++){
+  const slot=document.createElement('div');
+  slot.className='slot';
+  const reel=document.createElement('div');
+  reel.className='reel';
+  for(let d=0;d<10;d++){
+    const n=document.createElement('div');
+    n.textContent=d;
+    reel.appendChild(n);
+  }
+  slot.appendChild(reel);
+  frame.appendChild(slot);
+  reels.push(reel);
+}
+
+function spin(){
+  reels.forEach((r,i)=>{
+    let pos=0;
+    const run=setInterval(()=>{
+      pos=(pos+1)%10;
+      r.style.transform=`translateY(-${pos*200}px)`;
+    },80);
+    setTimeout(()=>clearInterval(run),1200+i*300);
+  });
+}
+
+function updateTicker(){
+  const d=dateInput.value||'--';
+  const t=timeInput.value||'--';
+  const v=venueInput.value||'LIVE DRAW';
+  tickerText.textContent=`DATE: ${d}   TIME: ${t}   ${v}`;
+}
+</script>
+
+</body>
+</html>
